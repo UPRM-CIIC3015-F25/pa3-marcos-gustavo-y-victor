@@ -157,7 +157,7 @@ class DeckManager:
             for rank in ranks:
                 image = cardImages.get((suit, rank))
                 if image:
-                    deck.append(Card(suit,rank,image))
+                    deck.append(Card(suit=suit, rank=rank, image=image))
         return deck
 
     # TODO (TASK 5.1): Complete the priceMap variable by assigning each joker a price.
