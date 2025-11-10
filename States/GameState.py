@@ -549,12 +549,45 @@ class GameState(State):
                 y -= 50
             cardsDict[card] = pygame.Rect(x, y, new_w, new_h)
 
-    # TODO (TASK 2) - Implement a basic card-sorting system without using built-in sort functions.
+    # Done (TASK 2) - Implement a basic card-sorting system without using built-in sort functions.
     #   Create a 'suitOrder' list (Hearts, Clubs, Diamonds, Spades), then use nested loops to compare each card
     #   with the ones after it. Depending on the mode, sort by rank first or suit first, swapping cards when needed
     #   until the entire hand is ordered correctly.
     def SortCards(self, sort_by: str = "suit"):
         suitOrder = [Suit.HEARTS, Suit.CLUBS, Suit.DIAMONDS, Suit.SPADES]         # Define the order of suits
+        self.updateCards(400, 520, self.cards, self.hand, scale=1.2)
+
+        hand_list = self.hand[:]
+
+        # Nested loop to compare and swap
+        for i in range(len(hand_list)):
+            for j in range(i + 1, len(hand_list)):
+                card1 = hand_list[i]
+                card2 = hand_list[j]
+
+                swap = False
+
+                if sort_by == "rank":
+                    if card1.rank.value > card2.rank.value:
+                        swap = True
+                    elif card1.rank.value == card2.rank.value:
+                        if suitOrder.index(card1.suit) > suitOrder.index(card2.suit):
+                            swap = True
+
+                elif sort_by == "suit":
+
+                    if suitOrder.index(card1.suit) > suitOrder.index(card2.suit):
+                        swap = True
+                    elif card1.suit == card2.suit:
+                        if card1.rank.value > card2.rank.value:
+                            swap = True
+
+                if swap:
+
+                    hand_list[i], hand_list[j] = hand_list[j], hand_list[i]
+
+
+        self.hand = hand_list
         self.updateCards(400, 520, self.cards, self.hand, scale=1.2)
 
     def checkHoverCards(self):
