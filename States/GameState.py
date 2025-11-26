@@ -814,6 +814,27 @@ class GameState(State):
         #       self.activated_jokers.add("joker card name")
         #   The last line ensures the Joker is visibly active and its effects are properly applied.
 
+        if "The Joker" in owned:
+            self.activated_jokers.add("The Joker")
+        if "Michael Myers" in owned:
+            self.activated_jokers.add("Michael Myers")
+        if "Fibonacci" in owned:
+            self.activated_jokers.add("Fibonacci")
+        if "Gauntlet" in owned:
+            self.activated_jokers.add("Gauntlet")
+        if "Ogre" in owned:
+            self.activated_jokers.add("Ogre")
+        if "StrawHat" in owned:
+            self.activated_jokers.add("StrawHat")
+        if "Hog Rider" in owned:
+            self.activated_jokers.add("Hog Rider")
+        if "? Block" in owned:
+            self.activated_jokers.add("? Block")
+        if "Hogwarts" in owned:
+            self.activated_jokers.add("Hogwarts")
+        if "802" in owned:
+            self.activated_jokers.add("802")
+
         procrastinate = False
 
         # commit modified player multiplier and chips
