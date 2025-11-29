@@ -88,22 +88,19 @@ def evaluate_hand(hand: list[Card]):
 
     if straight_flush:
         return "Straight Flush"
+    elif rank_values[0] == 4:
+        return "Four of a Kind"
+    elif len(rank_values) >= 2 and rank_values[0] == 3 and rank_values[1] == 2:
+        return "Full House"
     elif flush:
         return "Flush"
     elif straight:
         return "Straight"
-    elif rank_values[0] == 4:
-        return "Four of a Kind"
-    elif rank_values[0] == 3 and rank_values[1] == 2:
-        return "Full House"
     elif rank_values[0] == 3:
         return "Three of a Kind"
-    elif rank_values[0] == 2 and rank_values[1] == 2:
+    elif len(rank_values) >= 2 and rank_values[0] == 2 and rank_values[1] == 2:
         return "Two Pair"
     elif rank_values[0] == 2:
         return "One Pair"
     else:
         return "High Card"
-
-
-
