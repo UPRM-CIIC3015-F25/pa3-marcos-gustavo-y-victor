@@ -838,7 +838,7 @@ class GameState(State):
             self.activated_jokers.add("The Joker")
 
         if "Michael Myers" in owned:
-            mult = random.randint(1,23)
+            mult = random.randint(0,23)
             hand_mult += mult
             self.activated_jokers.add("Michael Myers")
 
@@ -858,19 +858,20 @@ class GameState(State):
             self.activated_jokers.add("Ogre")
 
         if "StrawHat" in owned:
-            hands_played = 4 - self.playerInfo.amountOfHands
+            starting_hands = 4
+            hands_played = starting_hands - self.playerInfo.amountOfHands
             total_chips += 100 - (5 * hands_played)
             self.activated_jokers.add("StrawHat")
 
         if "Hog Rider" in owned:
             if self.playedHandName == "Straight":
                 total_chips += 100
-            self.activated_jokers.add("Hog Rider")
+                self.activated_jokers.add("Hog Rider")
 
         if "? Block" in owned:
             if len(used_cards) == 4:
                 total_chips += 4
-            self.activated_jokers.add("? Block")
+                self.activated_jokers.add("? Block")
 
         if "Hogwarts" in owned:
             aces_played = 0
@@ -886,7 +887,7 @@ class GameState(State):
         if "802" in owned:
             if self.playerInfo.amountOfHands == 0:
                 procrastinate = True
-            self.activated_jokers.add("802")
+                self.activated_jokers.add("802")
 
 
         # commit modified player multiplier and chips
