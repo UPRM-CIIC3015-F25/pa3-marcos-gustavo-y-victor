@@ -1,4 +1,7 @@
 import pygame
+pygame.init()
+pygame.font.init()
+
 from States.Core.StateClass import State
 from States.Menus.TitleState import StartState
 from States.GameState import GameState
