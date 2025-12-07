@@ -834,27 +834,60 @@ class GameState(State):
         #   The last line ensures the Joker is visibly active and its effects are properly applied.
 
         if "The Joker" in owned:
+            hand_mult += 4
             self.activated_jokers.add("The Joker")
+
         if "Michael Myers" in owned:
+            mult = random.randint(1,23)
+            hand_mult += mult
             self.activated_jokers.add("Michael Myers")
+
         if "Fibonacci" in owned:
+            for c in used_cards:
+                if c.rank in [Rank.ACE, Rank.TWO, Rank.THREE, Rank.FIVE, Rank.EIGHT]:
+                    hand_mult += 8
             self.activated_jokers.add("Fibonacci")
+
         if "Gauntlet" in owned:
+            total_chips += 250
+            self.playerInfo.amountOfHands = max(0,self.playerInfo.amountOfHands - 2)
             self.activated_jokers.add("Gauntlet")
+
         if "Ogre" in owned:
+            hand_mult += 3 * len(self.playerJokers)
             self.activated_jokers.add("Ogre")
+
         if "StrawHat" in owned:
+            hands_played = 4 - self.playerInfo.amountOfHands
+            total_chips += 100 - (5 * hands_played)
             self.activated_jokers.add("StrawHat")
+
         if "Hog Rider" in owned:
+            if self.playedHandName == "Straight":
+                total_chips += 100
             self.activated_jokers.add("Hog Rider")
+
         if "? Block" in owned:
+            if len(used_cards) == 4:
+                total_chips += 4
             self.activated_jokers.add("? Block")
+
         if "Hogwarts" in owned:
+            aces_played = 0
+            for c in used_cards:
+                if c.rank == Rank.ACE:
+                    aces_played += 1
+            hand_mult += 4 * aces_played
+            total_chips += 20 * aces_played
             self.activated_jokers.add("Hogwarts")
-        if "802" in owned:
-            self.activated_jokers.add("802")
 
         procrastinate = False
+
+        if "802" in owned:
+            if self.playerInfo.amountOfHands == 0:
+                procrastinate = True
+            self.activated_jokers.add("802")
+
 
         # commit modified player multiplier and chips
         self.playerInfo.playerMultiplier = hand_mult
