@@ -165,6 +165,7 @@ class GameState(State):
             self.cardsSelectedRect = {}
             self.updateCards(400, 520, self.cards, self.hand, scale=1.2)
             self.deckManager.resetDeck = False  # Clear the flag
+            self.playerInfo.amountOfDiscards = self.playerInfo.discardLimit
 
         # Check if level is finished and transition to LevelSelectState
         if self.playerInfo.levelFinished:
