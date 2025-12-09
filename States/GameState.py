@@ -167,6 +167,7 @@ class GameState(State):
             self.deckManager.resetDeck = False  # Clear the flag
             self.playerInfo.amountOfDiscards = self.playerInfo.discardLimit
 
+
         # Check if level is finished and transition to LevelSelectState
         if self.playerInfo.levelFinished:
             reward = self.calculate_gold_reward(self.playerInfo)
@@ -274,11 +275,16 @@ class GameState(State):
         self.screen.blit(deckContainer, self.deckContainer.topleft)
 
     def drawCardsInHand(self):
-        for card in self.cards:
+        for card, rect in self.cards.items():
             if self.playHandActive and card in self.cardsSelectedList:
                 continue
-            img_to_draw = getattr(card, "scaled_image", card.image)
-            State.screen.blit(img_to_draw, self.cards[card])
+            if getattr(card, "faceDown", False):
+                back_img = pygame.image.load("Graphics/Cards/card_back.png").convert_alpha()
+                back_img = pygame.transform.scale(back_img, (rect.width, rect.height))
+                State.screen.blit(back_img, rect)
+            else:
+                img = getattr(card, "scaled_image", card.image)
+                State.screen.blit(img, rect)
         self.drawCardTooltip()
 
     def drawCenterCards(self):
@@ -477,7 +483,7 @@ class GameState(State):
 
             if self.playHandButtonRect.collidepoint(mousePosPlayerOpcions):
                 if not self.playHandActive and len(self.cardsSelectedList) > 0:
-                    self.playHand()
+                    self.playHand
 
             if self.sortRankRect.collidepoint(mousePosPlayerOpcions):
                 self.SortCards(sort_by="rank")
@@ -559,10 +565,17 @@ class GameState(State):
 
     def updateCards(self, posX, posY, cardsDict, cardsList, scale=1.5, spacing=90, baseYOffset=-20, leftShift=40):
         cardsDict.clear()
+        current_boss = self.playerInfo.levelManager.curSubLevel.bossLevel
         for i, card in enumerate(cardsList):
             w, h = card.image.get_width(), card.image.get_height()
             new_w, new_h = int(w * scale), int(h * scale)
             card.scaled_image = pygame.transform.scale(card.image, (new_w, new_h))
+            if current_boss == "The Mark":
+                card.faceDown = card.rank in [Rank.JACK, Rank.QUEEN, Rank.KING]
+            elif current_boss == "The House":
+                card.faceDown = True
+            else:
+                card.faceDown = False
             x = posX + i * spacing - leftShift
             y = posY + baseYOffset
             if getattr(card, "isSelected", False):
@@ -645,6 +658,7 @@ class GameState(State):
                 break
     
     # -------- Play Hand Logic -----------
+    @property
     def playHand(self):
         if self.playerInfo.amountOfHands == 0: # Check if last hand and failed the round
             target_score = self.playerInfo.levelManager.curSubLevel.score
